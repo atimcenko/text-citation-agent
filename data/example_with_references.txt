@@ -1,0 +1,14 @@
+Neural state space diagrams can, in principle, have as many axes as there are recorded neurons. In practice, neural activity typically varies along a much smaller set of directions—dimensions (Cueva et al., 2020; Stokes et al., 2015; Cowley et al., 2016; Haxby et al., 2001). Because neurons are correlated, each one does not contribute independently to the population signal (Nienborg et al., 2012; Schölvinck et al., 2015; Averbeck et al., 2006; Rabinowitz et al., 2015; Adibi et al., 2013); instead, combinations of neurons account for most of the variability (Ponce‐Alvarez et al., 2013; Cohen et al., 2009). This redundancy allows us to apply dimensionality reduction to project the original, neuron-dimensional space onto a smaller set of axes. One common choice for these axes is principal component analysis (PCA).
+
+References:
+- Cueva et al., 2020: DOI https://doi.org/10.1073/pnas.1915984117
+- Stokes et al., 2015: DOI https://doi.org/10.1016/j.tics.2015.05.004
+- Cowley et al., 2016: DOI https://doi.org/10.1371/journal.pcbi.1005185
+- Haxby et al., 2001: DOI https://doi.org/10.1126/science.1063736
+- Nienborg et al., 2012: DOI https://doi.org/10.1146/annurev-neuro-062111-150403
+- Schölvinck et al., 2015: DOI https://doi.org/10.1523/jneurosci.4994-13.2015
+- Averbeck et al., 2006: DOI https://doi.org/10.1152/jn.00919.2005
+- Rabinowitz et al., 2015: DOI https://doi.org/10.7554/elife.08998
+- Adibi et al., 2013: DOI https://doi.org/10.1523/jneurosci.3449-12.2013
+- Ponce‐Alvarez et al., 2013: DOI https://doi.org/10.1073/pnas.1300098110
+- Cohen et al., 2009: DOI https://doi.org/10.1523/jneurosci.5179-08.2009
