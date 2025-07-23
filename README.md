@@ -1,4 +1,4 @@
-# TU-LLM Citation Finder Agent
+# Citation Finder Agent
 
 A lightweight command-line tool that automatically detects factual claims in your text, retrieves relevant scholarly references via OpenAlex, and annotates your document with inline citations and a generated bibliography.
 
