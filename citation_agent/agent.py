@@ -30,23 +30,28 @@ def process_paragraph(text: str, verbose: bool = False):
     sentences = split_sentences(text)
     output = []
 
+    # loop through the sentences
     for s in sentences:
         if verbose:
             print(f"\n▶ [Sentence] {s}")
-
+        
+        # tag if the sentence needs supporting evidence at all
         tag = detect_claims(s)
         if verbose:
             print("   [Tag] ", tag)
 
+        # if does not need, proceed
         if not tag["needs_cite"]:
             if verbose:
                 print("   → No citation needed")
             output.append({"sentence": s, "claims": []})
             continue
-
+        
+        # fetch unique claims created by claim extractor agent
         spans = list(dict.fromkeys(tag["claim_spans"]))
 
         span_results = []
+        # for each claim span run the loop
         for span in spans:
             if verbose:
                 print(f"  [Claim Span] {span}")
@@ -56,12 +61,13 @@ def process_paragraph(text: str, verbose: bool = False):
             if verbose:
                 print("    [Queries] ", queries)
 
-            # 2) retrieve candidates
+            # 2) retrieve candidate references
             all_cands = []
             for q in queries:
                 if verbose:
                     print(f"    [Search] '{q}'")
                 try:
+                    # get top references from openalex
                     refs = get_top_references(q)
                     if not isinstance(refs, list):
                         raise RuntimeError(f"Expected list, got {type(refs)}")
@@ -101,7 +107,9 @@ def process_paragraph(text: str, verbose: bool = False):
             "claims": span_results
         })
 
-    return output
+    mapping = output # list of dicts with sentence and top_cits for each claim span
+
+    return mapping
 
 
 def write_with_references(input_path: str, mapping: list[dict], output_path: str):
@@ -114,7 +122,7 @@ def write_with_references(input_path: str, mapping: list[dict], output_path: str
     original = Path(input_path).read_text(encoding="utf-8")
     sentences = split_sentences(original)
 
-    seen = {}      # citation_key -> doi
+    seen = {}      # citation_key -> doi for bibliography
     annotated = []
 
     def annotate_sentence(s: str, claims: list[dict]) -> str:
@@ -137,7 +145,8 @@ def write_with_references(input_path: str, mapping: list[dict], output_path: str
 
             if not keys:
                 continue
-
+            
+            # inline citations
             insert_text = " (" + "; ".join(keys) + ")"
             inserts.append((start, end, insert_text))
 

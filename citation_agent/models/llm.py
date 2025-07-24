@@ -233,7 +233,8 @@ def rerank(claim: str, sentence: str, candidates: list[dict], top_k: int = TOP_K
         for c in candidates:
             text = (c["title"] + " " + c.get("summary","")).lower()
             score = sum(1 for kw in keywords if kw in text)
-            entry = c.copy(); entry["score"] = score
+            entry = c.copy()
+            entry["score"] = score
             scored.append(entry)
         scored.sort(key=lambda x: x["score"], reverse=True)
         return scored[:top_k]
