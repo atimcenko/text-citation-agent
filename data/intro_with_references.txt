@@ -1,0 +1,16 @@
+The main advantages of using a single‑cell receptive field or tuning curve approach are its simplicity and interpretability. However, it has clear limitations in real‑world scenarios (Katz et al., 2014; Wang et al., 2018; Muldoon et al., 2016; Geǐm et al., 2007; Szegedy et al., 2015). First, hand‑crafting visual stimuli ignores the statistical structure of natural scenes (Berkes et al., 2011; Reinagel et al., 1999; Reinagel et al., 1999), which rarely consist of simple features and instead exhibit rich spatio‑temporal correlations across scales. Second, focusing on single‑neuron responses discards the information embedded in interactions within the neural population (Maynard et al., 1999; Tkačik et al., 2010). For example, the information‑theoretic optimal code in the retina exploits noise correlations between retinal ganglion cells when encoding natural stimuli (Simoncelli et al., 2001), producing population receptive fields that differ substantially from the canonical center‑surround shapes (DeVries et al., 1997). Moreover, many neural systems exhibit mixed and context‑dependent selectivity (Rigotti et al., 2010; Panzeri et al., 2015), which can be easily overlooked when only a narrow subspace of a single neuron’s possible coding directions is explored
+
+References:
+- Katz et al., 2014: DOI https://doi.org/10.1201/b17668
+- Wang et al., 2018: DOI https://doi.org/10.1609/aaai.v32i1.11872
+- Muldoon et al., 2016: DOI https://doi.org/10.1038/srep22057
+- Geǐm et al., 2007: DOI https://doi.org/10.1038/nmat1849
+- Szegedy et al., 2015: DOI https://doi.org/10.1109/cvpr.2015.7298594
+- Berkes et al., 2011: DOI https://doi.org/10.1126/science.1195870
+- Reinagel et al., 1999: DOI https://doi.org/10.1088/0954-898x/10/4/304
+- Maynard et al., 1999: DOI https://doi.org/10.1523/jneurosci.19-18-08083.1999
+- Tkačik et al., 2010: DOI https://doi.org/10.1073/pnas.1004906107
+- Simoncelli et al., 2001: DOI https://doi.org/10.1146/annurev.neuro.24.1.1193
+- DeVries et al., 1997: DOI https://doi.org/10.1152/jn.1997.78.4.2048
+- Rigotti et al., 2010: DOI https://doi.org/10.3389/fncom.2010.00024
+- Panzeri et al., 2015: DOI https://doi.org/10.1016/j.tics.2015.01.002
