@@ -11,3 +11,4 @@ wheels/
 
 # Environmental variables and configs (sensitive!)
 .env
+.vscode/
