@@ -44,8 +44,10 @@ def process_paragraph(text: str, verbose: bool = False):
             output.append({"sentence": s, "claims": []})
             continue
 
+        spans = list(dict.fromkeys(tag["claim_spans"]))
+
         span_results = []
-        for span in tag["claim_spans"]:
+        for span in spans:
             if verbose:
                 print(f"  [Claim Span] {span}")
 
@@ -59,10 +61,17 @@ def process_paragraph(text: str, verbose: bool = False):
             for q in queries:
                 if verbose:
                     print(f"    [Search] '{q}'")
-                refs = get_top_references(q)
-                if verbose:
-                    print(f"      [Results] {len(refs)} refs")
+                try:
+                    refs = get_top_references(q)
+                    if not isinstance(refs, list):
+                        raise RuntimeError(f"Expected list, got {type(refs)}")
+                    if verbose:
+                        print(f"      [Results] {len(refs)}")
+                except Exception as e:
+                    print(f"      ⚠️  OpenAlex search failed for '{q}': {e}")
+                    refs = []
                 all_cands.extend(refs)
+
 
             # 3) dedupe by DOI
             seen = set()

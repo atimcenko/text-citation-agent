@@ -17,6 +17,7 @@ RETRY_DELAY   = float(os.getenv("RETRY_DELAY", 1.0))
 VERBOSE       = os.getenv("VERBOSE", "0") == "1"
 MAX_CAND      = int(os.getenv("MAX_CAND", "25"))
 TOP_K         = int(os.getenv("TOP_K", "10"))
+NUM_QUERIES   = int(os.getenv("NUM_QUERIES", "5"))
 
 def set_verbose(v: bool):
     """Enable or disable verbose debug printing."""
@@ -107,24 +108,39 @@ def detect_claims(sentence: str) -> dict:
 
 _GENQ_PROMPT = """
 You are a scholarly-query generator.
-Given a claim span and its full sentence, produce 3 concise lowercase search queries that would help find papers supporting the claim.
-Return JSON with exactly:
+Given a claim span and its full sentence, produce {n} concise lowercase search queries that would help find papers supporting the claim.
+Keep in mind the domain specificity. You can try to infer the domain from the claim. Use domain-specific keywords in such case.
+In case the domain is not clear, create generic search requests relevant for clarifying the clame faithfullness.
+In case you think the domain is well-defined based on the sentence and the claim span, try using your prior knowledge about the authors and early works influential in the domain.
+For example, if the claim references transformer architecture the search query could be "transformers vaswani", "attention is all you need"
+In case the voltage-gated sodium channels are mentioned one could search for "hodgkin huxley squid axon conductances", "voltage gated sodium channels review" etc.
+
+Return JSON with exactly, no brackets, not "json" markers. Pure JSON exactly like this:
 {{
-  "queries": [ "query1", "query2", "query3" ]
+  "queries": [ "query1", "query2", "query3", "query4", "query5"]
 }}
+
+Eeach query must be unique and tackle the statement from different perspectives.
 
 Claim span:
 \"\"\"{claim}\"\"\"
 
 Full sentence:
 \"\"\"{sentence}\"\"\"
-"""
+""".replace("{n}", str(NUM_QUERIES))
 
 def gen_queries(claim: str, sentence: str) -> list[str]:
     prompt = _GENQ_PROMPT.format(claim=claim, sentence=sentence)
-    resp = llm_call(prompt, max_tokens=200)
+    resp = llm_call(prompt, max_tokens=200, temperature=1)
     try:
-        return json.loads(resp)["queries"]
+        raw = json.loads(resp)["queries"]
+        # preserve order, drop exact duplicates
+        queries: list[str] = []
+        for q in raw:
+            q = q.strip()
+            if q and q not in queries:
+                queries.append(q)
+        return queries
     except (json.JSONDecodeError, KeyError):
         raise ValueError(f"Invalid JSON from gen_queries:\n{resp}")
 
